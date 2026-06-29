@@ -1,0 +1,38 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  overflow-x: hidden;
+  overflow-y: auto;
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  @apply text-gray-800;
+  background-image: url("/images/bg-pattern.svg"), var(--tw-gradient-soft, none);
+  background-color: transparent;
+  background-attachment: fixed, fixed;
+  background-size: 220px 220px, cover;
+  background-repeat: repeat, no-repeat;
+  overflow-x: hidden;
+  width: 100%;
+  margin: 0;
+}
+
+/* apply the tailwind gradient as a real background image so it can layer with the pattern */
+body {
+  background-image: url("/images/bg-pattern.svg"),
+    linear-gradient(135deg, #DDE3FD 0%, #BFEFF7 50%, #FBD7E9 100%);
+}
+
+/* Smooth transitions used across the site (moderate animation) */
+.transition-soft {
+  transition: all 0.3s ease-in-out;
+}
+
+.hover-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+}

@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="220" height="220" viewBox="0 0 220 220">
+  <g fill="none" stroke="#4338CA" stroke-width="1.4" opacity="0.10" stroke-linecap="round" stroke-linejoin="round">
+    <!-- laptop icon -->
+    <g transform="translate(10,15)">
+      <rect x="2" y="2" width="34" height="22" rx="2"/>
+      <path d="M0 26 H38 L34 30 H4 Z"/>
+    </g>
+
+    <!-- monitor icon -->
+    <g transform="translate(120,20)">
+      <rect x="0" y="0" width="36" height="24" rx="2"/>
+      <line x1="14" y1="24" x2="14" y2="30"/>
+      <line x1="22" y1="24" x2="22" y2="30"/>
+      <line x1="10" y1="32" x2="26" y2="32"/>
+    </g>
+
+    <!-- wrench icon -->
+    <g transform="translate(60,90)">
+      <path d="M2 22 L18 6 a5 5 0 0 1 7 7 L11 29 a5 5 0 0 1-7-7 Z"/>
+      <circle cx="21" cy="5" r="3"/>
+    </g>
+
+    <!-- laptop icon (offset repeat) -->
+    <g transform="translate(150,120)">
+      <rect x="2" y="2" width="34" height="22" rx="2"/>
+      <path d="M0 26 H38 L34 30 H4 Z"/>
+    </g>
+
+    <!-- monitor icon (offset repeat) -->
+    <g transform="translate(20,150)">
+      <rect x="0" y="0" width="36" height="24" rx="2"/>
+      <line x1="14" y1="24" x2="14" y2="30"/>
+      <line x1="22" y1="24" x2="22" y2="30"/>
+      <line x1="10" y1="32" x2="26" y2="32"/>
+    </g>
+
+    <!-- small wrench repeat -->
+    <g transform="translate(170,180)">
+      <path d="M2 22 L18 6 a5 5 0 0 1 7 7 L11 29 a5 5 0 0 1-7-7 Z"/>
+      <circle cx="21" cy="5" r="3"/>
+    </g>
+  </g>
+</svg>
