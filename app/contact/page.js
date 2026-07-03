@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { supabase } from "../../lib/supabaseClient";
 import {
   Mail,
@@ -10,6 +11,9 @@ import {
   CheckCircle2,
   Clock,
   ChevronDown,
+  Sparkles,
+  Wrench,
+  Headset,
 } from "lucide-react";
 
 const contactInfo = [
@@ -24,9 +28,17 @@ const officeHours = [
   { day: "Sunday", time: "Closed" },
 ];
 
+const reasons = [
+  { icon: Sparkles, title: "New Rental", desc: "Looking to rent a laptop, monitor or other device." },
+  { icon: Wrench, title: "Servicing", desc: "Need a repair or maintenance for an existing device." },
+  { icon: Headset, title: "General Support", desc: "Questions about pricing, delivery or your account." },
+];
+
 const faqs = [
   { q: "How quickly will I get a response?", a: "We usually respond within a few hours during business hours, and within 24 hours otherwise." },
   { q: "Can I get support for an ongoing rental?", a: "Yes, existing customers get priority support — just mention your booking details." },
+  { q: "Do you offer corporate or bulk rentals?", a: "Yes, we work with startups and businesses on bulk device rentals with flexible terms — mention your requirement in the message." },
+  { q: "What cities do you currently deliver to?", a: "We currently serve Delhi, Noida, Ghaziabad, Faridabad, Gurugram and Meerut, with more cities coming soon." },
 ];
 
 export default function ContactPage() {
@@ -62,16 +74,43 @@ export default function ContactPage() {
 
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 py-10 sm:py-16">
-      <div className="text-center max-w-xl mx-auto mb-9 sm:mb-14">
-        <span className="inline-flex items-center gap-1.5 bg-primary/10 text-primary font-semibold text-xs uppercase tracking-wide px-3.5 py-1.5 rounded-full mb-3">
-          <MessageCircle size={13} /> Contact
-        </span>
-        <h1 className="text-2xl sm:text-4xl font-bold mb-3 text-gray-900">
-          Get In <span className="text-primary">Touch</span>
-        </h1>
-        <p className="text-gray-600 text-sm sm:text-base">
-          Questions about rentals or servicing? We're here to help.
-        </p>
+      {/* ===== HERO with image banner ===== */}
+      <div className="relative overflow-hidden rounded-2xl sm:rounded-3xl mb-10 sm:mb-16 shadow-xl">
+        <div className="relative h-40 sm:h-56 md:h-64">
+          <Image
+            src="/images/normal_laptop.jpg"
+            alt="Get in touch with Rentogram"
+            fill
+            sizes="100vw"
+            className="object-cover"
+            priority
+          />
+          <div className="absolute inset-0 bg-gradient-to-br from-indigo-900/90 via-violet-800/85 to-pink-900/80" />
+        </div>
+        <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-4">
+          <span className="inline-flex items-center gap-1.5 bg-white/15 backdrop-blur-sm border border-white/25 text-white font-semibold text-xs uppercase tracking-wide px-3.5 py-1.5 rounded-full mb-3">
+            <MessageCircle size={13} /> Contact
+          </span>
+          <h1 className="text-2xl sm:text-4xl font-bold mb-2 text-white">
+            Get In <span className="bg-gradient-to-r from-cyan-300 to-pink-300 bg-clip-text text-transparent">Touch</span>
+          </h1>
+          <p className="text-white/85 text-sm sm:text-base max-w-md">
+            Questions about rentals or servicing? We're here to help — usually within a few hours.
+          </p>
+        </div>
+      </div>
+
+      {/* ===== Reasons to reach out ===== */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-5 mb-10 sm:mb-16">
+        {reasons.map((r) => (
+          <div key={r.title} className="group bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-sm border border-gray-100 transition-soft hover:-translate-y-1 hover:shadow-md text-center">
+            <div className="w-11 h-11 sm:w-12 sm:h-12 mx-auto rounded-xl bg-primary/10 flex items-center justify-center mb-3 transition-soft group-hover:scale-110">
+              <r.icon className="text-primary" size={20} />
+            </div>
+            <h3 className="font-semibold text-sm sm:text-base text-gray-900 mb-1">{r.title}</h3>
+            <p className="text-xs sm:text-sm text-gray-600">{r.desc}</p>
+          </div>
+        ))}
       </div>
 
       <div className="grid md:grid-cols-2 gap-4 sm:gap-10 mb-10 sm:mb-16">
@@ -155,12 +194,20 @@ export default function ContactPage() {
         </div>
       </div>
 
-      {/* Map placeholder */}
-      <div className="rounded-2xl overflow-hidden shadow-md border border-gray-100 mb-10 sm:mb-16 h-48 sm:h-64 bg-gradient-to-br from-indigo-100 via-cyan-50 to-pink-100 flex items-center justify-center">
-        <div className="text-center">
-          <MapPin className="text-primary mx-auto mb-2" size={28} />
-          <p className="text-sm text-gray-600 font-medium">Delhi, India</p>
-          <p className="text-xs text-gray-400">Map preview</p>
+      {/* Service area banner */}
+      <div className="relative overflow-hidden rounded-2xl border border-gray-100 shadow-md mb-10 sm:mb-16 h-44 sm:h-56">
+        <Image
+          src="/images/Samsung_4K_32.jpg"
+          alt="Rentogram service area across Delhi-NCR"
+          fill
+          sizes="100vw"
+          className="object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/50 to-black/20" />
+        <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-4">
+          <MapPin className="text-white mb-2" size={26} />
+          <p className="text-white font-semibold text-sm sm:text-base">Delhi · Noida · Ghaziabad · Faridabad · Gurugram · Meerut</p>
+          <p className="text-white/75 text-xs sm:text-sm mt-1">Doorstep delivery & servicing across Delhi-NCR</p>
         </div>
       </div>
 

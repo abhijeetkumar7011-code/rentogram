@@ -3,28 +3,30 @@
 @tailwind utilities;
 
 html {
-  overflow-x: hidden;
-  overflow-y: auto;
   width: 100%;
-  height: 100%;
 }
 
 body {
   @apply text-gray-800;
-  background-image: url("/images/bg-pattern.svg"), var(--tw-gradient-soft, none);
+  position: relative;
   background-color: transparent;
-  background-attachment: fixed, fixed;
-  background-size: 220px 220px, cover;
-  background-repeat: repeat, no-repeat;
   overflow-x: hidden;
   width: 100%;
   margin: 0;
 }
 
-/* apply the tailwind gradient as a real background image so it can layer with the pattern */
-body {
+/* Fixed background lives on a ::before pseudo-element (not on body/html directly).
+   Doing it directly on body with overflow-x:hidden creates a nested scroll
+   container (double scrollbar bug) — this avoids that entirely. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
   background-image: url("/images/bg-pattern.svg"),
     linear-gradient(135deg, #DDE3FD 0%, #BFEFF7 50%, #FBD7E9 100%);
+  background-size: 220px 220px, cover;
+  background-repeat: repeat, no-repeat;
 }
 
 /* Smooth transitions used across the site (moderate animation) */
@@ -35,4 +37,33 @@ body {
 .hover-lift:hover {
   transform: translateY(-4px);
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+}
+
+/* Trusted-brands marquee (moderate speed, pauses on hover) */
+@keyframes marquee-scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.animate-marquee {
+  animation: marquee-scroll 28s linear infinite;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
+/* Small "live" pulse dot used on city-coverage cards */
+@keyframes pulse-dot {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.6); opacity: 0.35; }
+}
+
+.pulse-dot::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  background: currentColor;
+  animation: pulse-dot 2s ease-in-out infinite;
 }

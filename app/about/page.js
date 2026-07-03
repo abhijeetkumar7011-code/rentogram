@@ -1,3 +1,4 @@
+import Image from "next/image";
 import {
   Target,
   Users,
@@ -10,6 +11,8 @@ import {
   ShieldCheck,
   Clock,
   ArrowRight,
+  Quote,
+  PackageCheck,
 } from "lucide-react";
 
 const values = [
@@ -39,21 +42,65 @@ const whyUs = [
   { icon: TrendingUp, title: "Flexible Plans", desc: "Daily, weekly or monthly rentals." },
 ];
 
+const gallery = [
+  { src: "/images/macbook.jpg", label: "Apple Devices" },
+  { src: "/images/normal_laptop.jpg", label: "Business Laptops" },
+  { src: "/images/Samsung_4K_32.jpg", label: "4K Monitors" },
+  { src: "/images/LG_UltraWide_27.jpg", label: "UltraWide Displays" },
+];
+
 export default function AboutPage() {
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10 sm:py-16">
-      {/* Hero */}
-      <div className="text-center max-w-2xl mx-auto mb-9 sm:mb-14">
-        <span className="inline-flex items-center gap-1.5 bg-primary/10 text-primary font-semibold text-xs uppercase tracking-wide px-3.5 py-1.5 rounded-full mb-3">
-          <Sparkles size={13} /> About Us
-        </span>
-        <h1 className="text-2xl sm:text-4xl font-bold mb-3 text-gray-900">
-          About <span className="text-primary">Rentogram</span>
-        </h1>
-        <p className="text-gray-600 text-sm sm:text-base">
-          Rentogram started with a simple idea — why buy expensive tech for short-term needs,
-          when you can rent quality-checked devices, fully serviced and ready to use?
-        </p>
+      {/* ===== HERO with image ===== */}
+      <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center mb-14 sm:mb-24">
+        <div className="text-center lg:text-left">
+          <span className="inline-flex items-center gap-1.5 bg-primary/10 text-primary font-semibold text-xs uppercase tracking-wide px-3.5 py-1.5 rounded-full mb-4">
+            <Sparkles size={13} /> About Us
+          </span>
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold mb-4 text-gray-900 leading-tight">
+            Tech rental, built on <span className="text-primary">trust</span>.
+          </h1>
+          <p className="text-gray-600 text-sm sm:text-base max-w-lg mx-auto lg:mx-0 mb-5">
+            Rentogram started with a simple idea — why buy expensive tech for short-term needs,
+            when you can rent quality-checked devices, fully serviced and ready to use? Since
+            2022, we've helped hundreds of students, freelancers and businesses across
+            Delhi-NCR get the tech they need, without the upfront cost.
+          </p>
+          <div className="flex flex-wrap justify-center lg:justify-start gap-2.5">
+            {["Quality checked", "Doorstep delivery", "Honest pricing"].map((t) => (
+              <span key={t} className="inline-flex items-center gap-1.5 bg-white shadow-sm border border-gray-100 text-xs font-medium text-gray-700 px-3 py-1.5 rounded-full">
+                <ShieldCheck size={12} className="text-emerald-500" /> {t}
+              </span>
+            ))}
+          </div>
+        </div>
+
+        {/* image collage */}
+        <div className="relative mx-auto max-w-[280px] sm:max-w-sm lg:max-w-none w-full">
+          <div className="absolute -inset-4 bg-gradient-to-br from-indigo-400/20 via-violet-400/20 to-pink-400/20 rounded-[2rem] blur-2xl -z-10" />
+          <div className="relative rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl border border-white/60 aspect-[4/3]">
+            <Image
+              src="/images/macbook.jpg"
+              alt="Rentogram — quality-checked laptops ready to rent"
+              fill
+              sizes="(max-width: 1024px) 90vw, 40vw"
+              className="object-cover"
+            />
+          </div>
+          <div className="absolute -bottom-6 -left-4 sm:-left-8 w-28 sm:w-40 rounded-xl sm:rounded-2xl overflow-hidden shadow-xl border-4 border-white aspect-square">
+            <Image
+              src="/images/Samsung_4K_32.jpg"
+              alt="4K monitor available for rent on Rentogram"
+              fill
+              sizes="160px"
+              className="object-cover"
+            />
+          </div>
+          <div className="absolute -top-4 -right-2 sm:-right-4 flex items-center gap-1.5 bg-white shadow-lg rounded-xl px-3 py-2 text-[10px] sm:text-xs font-semibold text-gray-700 rotate-[3deg]">
+            <Award size={13} className="text-amber-500" /> 300+ Happy Clients
+          </div>
+        </div>
       </div>
 
       {/* Stats banner */}
@@ -82,6 +129,34 @@ export default function AboutPage() {
         ))}
       </div>
 
+      {/* ===== What We Rent — image gallery (builds trust: real inventory) ===== */}
+      <div className="mb-12 sm:mb-20">
+        <div className="text-center max-w-xl mx-auto mb-8 sm:mb-10">
+          <span className="inline-flex items-center gap-1.5 bg-primary/10 text-primary font-semibold text-xs uppercase tracking-wide px-3.5 py-1.5 rounded-full mb-3">
+            <PackageCheck size={13} /> Our Inventory
+          </span>
+          <h2 className="text-xl sm:text-3xl font-bold text-gray-900">Real Devices, Quality Checked</h2>
+          <p className="text-gray-600 text-sm mt-2">
+            Every device you see here is part of our actual rental fleet — inspected, tested and ready to go.
+          </p>
+        </div>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-5">
+          {gallery.map((g) => (
+            <div key={g.label} className="group relative rounded-xl sm:rounded-2xl overflow-hidden shadow-md border border-gray-100 aspect-square">
+              <Image
+                src={g.src}
+                alt={g.label}
+                fill
+                sizes="(max-width: 640px) 50vw, 25vw"
+                className="object-cover transition-soft group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/0 to-transparent" />
+              <span className="absolute bottom-2.5 left-3 text-white text-xs sm:text-sm font-semibold">{g.label}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
       {/* Our story timeline */}
       <div className="mb-12 sm:mb-20">
         <div className="text-center max-w-xl mx-auto mb-8 sm:mb-12">
@@ -103,6 +178,20 @@ export default function AboutPage() {
             </div>
           ))}
         </div>
+      </div>
+
+      {/* ===== Founder note ===== */}
+      <div className="relative overflow-hidden rounded-2xl sm:rounded-3xl p-6 sm:p-10 mb-12 sm:mb-20 bg-white/50 backdrop-blur-xl border border-white/60 shadow-md">
+        <div className="absolute -top-10 -left-10 w-40 h-40 bg-indigo-300/20 rounded-full blur-3xl -z-10" />
+        <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-pink-300/20 rounded-full blur-3xl -z-10" />
+        <Quote className="text-primary/40 mb-3" size={30} />
+        <p className="text-gray-700 text-sm sm:text-lg leading-relaxed max-w-3xl">
+          "We built Rentogram because we kept seeing the same problem — talented people held
+          back by the upfront cost of good tech. A student needing a laptop for one semester, a
+          freelancer needing a monitor for one project. Renting just made sense. Every device we
+          send out is one we'd be happy to use ourselves."
+        </p>
+        <p className="text-xs sm:text-sm font-semibold text-gray-500 mt-4">— The Rentogram Team</p>
       </div>
 
       {/* Why choose us - detailed */}

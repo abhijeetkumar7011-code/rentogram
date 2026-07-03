@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { supabase } from "../../lib/supabaseClient";
 import {
   Wrench,
@@ -17,7 +18,15 @@ import {
   PackageCheck,
   ChevronDown,
   Star,
+  Sparkles,
+  BadgeCheck,
 } from "lucide-react";
+
+const AVATAR_COLORS = ["from-indigo-500 to-violet-500", "from-cyan-500 to-blue-500"];
+
+function initials(name) {
+  return name.split(" ").map((w) => w[0]).slice(0, 2).join("").toUpperCase();
+}
 
 const features = [
   { icon: Wrench, title: "Expert Repairs", desc: "Certified technicians for hardware & software issues.", from: "from-indigo-400", to: "to-indigo-600" },
@@ -27,17 +36,17 @@ const features = [
 ];
 
 const deviceTypes = [
-  { icon: Laptop, label: "Laptops" },
-  { icon: Monitor, label: "Desktops & Monitors" },
-  { icon: Server, label: "Servers" },
-  { icon: Printer, label: "Printers" },
+  { icon: Laptop, label: "Laptops", from: "from-indigo-400", to: "to-indigo-600" },
+  { icon: Monitor, label: "Desktops & Monitors", from: "from-cyan-400", to: "to-cyan-600" },
+  { icon: Server, label: "Servers", from: "from-purple-400", to: "to-purple-600" },
+  { icon: Printer, label: "Printers", from: "from-pink-400", to: "to-pink-600" },
 ];
 
 const process = [
-  { icon: ClipboardList, step: "01", title: "Raise a Request", desc: "Tell us your device & issue through our simple form.", from: "from-indigo-500", to: "to-violet-500" },
-  { icon: Search, step: "02", title: "Diagnosis", desc: "Our technician inspects and diagnoses the issue, free of cost.", from: "from-cyan-500", to: "to-blue-500" },
-  { icon: Wrench, step: "03", title: "Repair", desc: "We fix it using genuine parts — onsite or at our service center.", from: "from-pink-500", to: "to-rose-500" },
-  { icon: PackageCheck, step: "04", title: "Delivery", desc: "Your serviced device is delivered back, fully tested.", from: "from-amber-500", to: "to-orange-500" },
+  { icon: ClipboardList, title: "Raise a Request", desc: "Tell us your device & issue through our simple form.", from: "from-indigo-500", to: "to-violet-500" },
+  { icon: Search, title: "Diagnosis", desc: "Our technician inspects and diagnoses the issue, free of cost.", from: "from-cyan-500", to: "to-blue-500" },
+  { icon: Wrench, title: "Repair", desc: "We fix it using genuine parts — onsite or at our service center.", from: "from-pink-500", to: "to-rose-500" },
+  { icon: PackageCheck, title: "Delivery", desc: "Your serviced device is delivered back, fully tested.", from: "from-amber-500", to: "to-orange-500" },
 ];
 
 const plans = [
@@ -65,8 +74,8 @@ const plans = [
 ];
 
 const testimonials = [
-  { name: "Karan Verma", text: "Screen issue on my rented laptop fixed within a day. Smooth pickup & drop." },
-  { name: "Simran Kaur", text: "AMC plan has saved us so much on our office desktops. Highly recommend." },
+  { name: "Karan Verma", role: "Rented Laptop User", text: "Screen issue on my rented laptop fixed within a day. Smooth pickup & drop." },
+  { name: "Simran Kaur", role: "Office Manager", text: "AMC plan has saved us so much on our office desktops. Highly recommend." },
 ];
 
 const faqs = [
@@ -109,18 +118,32 @@ export default function ServicingPage() {
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10 sm:py-16">
-      {/* Hero */}
-      <div className="text-center max-w-2xl mx-auto mb-9 sm:mb-14">
-        <span className="inline-flex items-center gap-1.5 bg-primary/10 text-primary font-semibold text-xs uppercase tracking-wide px-3.5 py-1.5 rounded-full mb-3">
-          <Wrench size={13} /> Servicing
-        </span>
-        <h1 className="text-2xl sm:text-4xl font-bold mb-3 text-gray-900">
-          Tech <span className="text-primary">Servicing</span> & Support
-        </h1>
-        <p className="text-gray-600 text-sm sm:text-base">
-          Whether it's your rented device or your own, our team keeps your tech running smoothly —
-          from quick fixes to full annual maintenance plans.
-        </p>
+      {/* ===== HERO — image banner ===== */}
+      <div className="relative overflow-hidden rounded-2xl sm:rounded-3xl mb-10 sm:mb-16 shadow-xl">
+        <div className="relative h-48 sm:h-64 md:h-72">
+          <Image
+            src="/images/Samsung_4K_32.jpg"
+            alt="Rentogram servicing and repair support"
+            fill
+            sizes="100vw"
+            className="object-cover"
+            priority
+          />
+          <div className="absolute inset-0 bg-gradient-to-br from-indigo-900/92 via-violet-900/88 to-purple-900/80" />
+          <div className="absolute -right-10 -bottom-10 w-56 h-56 bg-white/10 rounded-full blur-3xl" />
+        </div>
+        <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-4">
+          <span className="inline-flex items-center gap-1.5 bg-white/15 backdrop-blur-sm border border-white/25 text-white font-semibold text-xs uppercase tracking-wide px-3.5 py-1.5 rounded-full mb-3">
+            <Wrench size={13} /> Servicing
+          </span>
+          <h1 className="text-2xl sm:text-4xl md:text-5xl font-extrabold mb-3 text-white leading-tight">
+            Tech <span className="bg-gradient-to-r from-cyan-300 to-pink-300 bg-clip-text text-transparent">Servicing</span> & Support
+          </h1>
+          <p className="text-white/85 text-sm sm:text-base max-w-lg">
+            Whether it's your rented device or your own, our team keeps your tech running smoothly —
+            from quick fixes to full annual maintenance plans.
+          </p>
+        </div>
       </div>
 
       {/* Feature badges */}
@@ -141,33 +164,70 @@ export default function ServicingPage() {
 
       {/* Devices we service */}
       <div className="mb-12 sm:mb-20">
-        <h2 className="text-lg sm:text-2xl font-semibold text-center mb-6 sm:mb-8 text-gray-900">
-          Devices We Service
-        </h2>
-        <div className="flex flex-wrap justify-center gap-3 sm:gap-5">
+        <div className="text-center max-w-xl mx-auto mb-7 sm:mb-10">
+          <span className="inline-flex items-center gap-1.5 bg-primary/10 text-primary font-semibold text-xs uppercase tracking-wide px-3.5 py-1.5 rounded-full mb-3">
+            <PackageCheck size={13} /> Coverage
+          </span>
+          <h2 className="text-lg sm:text-2xl font-semibold text-gray-900">
+            Devices We Service
+          </h2>
+        </div>
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-5">
           {deviceTypes.map((d) => (
             <div
               key={d.label}
-              className="flex items-center gap-2 bg-white px-4 sm:px-6 py-2.5 sm:py-3.5 rounded-full shadow-sm border border-gray-100 text-xs sm:text-sm font-medium text-gray-700"
+              className="group bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 text-center shadow-sm border border-gray-100 transition-soft hover:-translate-y-1 hover:shadow-md"
             >
-              <d.icon size={16} className="text-primary" />
-              {d.label}
+              <div className={`w-11 h-11 sm:w-14 sm:h-14 mx-auto rounded-xl sm:rounded-2xl bg-gradient-to-br ${d.from} ${d.to} flex items-center justify-center mb-2.5 sm:mb-3 shadow-sm transition-soft group-hover:scale-110 group-hover:rotate-3`}>
+                <d.icon className="text-white" size={20} />
+              </div>
+              <p className="text-xs sm:text-sm font-semibold text-gray-800">{d.label}</p>
             </div>
           ))}
         </div>
       </div>
 
-      {/* How servicing works */}
+      {/* ===== Quality assurance — image banner ===== */}
+      <div className="relative overflow-hidden rounded-2xl sm:rounded-3xl mb-12 sm:mb-20 shadow-lg">
+        <div className="relative h-40 sm:h-52">
+          <Image
+            src="/images/normal_laptop.jpg"
+            alt="Every repair is quality tested at Rentogram"
+            fill
+            sizes="100vw"
+            className="object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/60 to-black/20" />
+        </div>
+        <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-4">
+          <ShieldCheck className="text-emerald-400 mb-2" size={26} />
+          <p className="text-white font-semibold text-sm sm:text-lg">Every Repair, Quality Tested Before Delivery</p>
+          <p className="text-white/70 text-xs sm:text-sm mt-1 max-w-md">
+            Genuine parts, certified technicians, and a final quality check on every device.
+          </p>
+        </div>
+      </div>
+
+      {/* How servicing works — modern numbered flow */}
       <div className="mb-12 sm:mb-20">
-        <h2 className="text-lg sm:text-2xl font-semibold text-center mb-7 sm:mb-10 text-gray-900">
-          How Our Servicing Works
-        </h2>
-        <div className="relative grid grid-cols-2 sm:grid-cols-4 gap-5 sm:gap-6">
-          <div className="hidden sm:block absolute top-7 left-[12%] right-[12%] h-0.5 bg-gradient-to-r from-primary via-secondary to-accent opacity-30 z-0" />
-          {process.map((p) => (
-            <div key={p.step} className="relative z-10 text-center">
-              <div className={`w-12 h-12 sm:w-14 sm:h-14 mx-auto rounded-2xl bg-gradient-to-br ${p.from} ${p.to} flex items-center justify-center shadow-lg mb-3`}>
-                <p.icon className="text-white" size={20} />
+        <div className="text-center max-w-xl mx-auto mb-7 sm:mb-10">
+          <span className="inline-flex items-center gap-1.5 bg-secondary/10 text-secondary font-semibold text-xs uppercase tracking-wide px-3.5 py-1.5 rounded-full mb-3">
+            <Sparkles size={13} /> Simple Process
+          </span>
+          <h2 className="text-lg sm:text-2xl font-semibold text-gray-900">
+            How Our Servicing Works
+          </h2>
+        </div>
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6">
+          {process.map((p, i) => (
+            <div key={p.title} className="relative bg-white rounded-xl sm:rounded-2xl border border-gray-100 shadow-sm p-4 sm:p-6 text-center transition-soft hover:-translate-y-1 hover:shadow-md">
+              <div className="relative w-12 h-12 sm:w-14 sm:h-14 mx-auto mb-3">
+                <div className={`w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-br ${p.from} ${p.to} flex items-center justify-center shadow-lg`}>
+                  <p.icon className="text-white" size={20} />
+                </div>
+                <span className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-white shadow-md border border-gray-100 flex items-center justify-center text-[11px] font-extrabold text-gray-900">
+                  {i + 1}
+                </span>
               </div>
               <h3 className="font-semibold text-xs sm:text-sm mb-1 text-gray-900">{p.title}</h3>
               <p className="text-[10px] sm:text-xs text-gray-600">{p.desc}</p>
@@ -237,15 +297,25 @@ export default function ServicingPage() {
           What Customers Say About Our Servicing
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 max-w-3xl mx-auto">
-          {testimonials.map((t) => (
+          {testimonials.map((t, i) => (
             <div key={t.name} className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-sm border border-gray-100">
               <div className="flex gap-1 text-secondary mb-2">
                 {[...Array(5)].map((_, idx) => (
                   <Star key={idx} size={14} fill="currentColor" />
                 ))}
               </div>
-              <p className="text-xs sm:text-sm text-gray-700 mb-3">"{t.text}"</p>
-              <p className="font-semibold text-xs sm:text-sm text-gray-900">{t.name}</p>
+              <p className="text-xs sm:text-sm text-gray-700 mb-4">"{t.text}"</p>
+              <div className="flex items-center gap-2.5 pt-3 border-t border-gray-50">
+                <div className={`w-8 h-8 shrink-0 rounded-full bg-gradient-to-br ${AVATAR_COLORS[i % AVATAR_COLORS.length]} flex items-center justify-center text-white text-[10px] font-bold shadow-sm`}>
+                  {initials(t.name)}
+                </div>
+                <div>
+                  <p className="font-semibold text-xs sm:text-sm text-gray-900 flex items-center gap-1">
+                    {t.name} <BadgeCheck size={12} className="text-cyan-500" />
+                  </p>
+                  <p className="text-[10px] sm:text-xs text-gray-500">{t.role}</p>
+                </div>
+              </div>
             </div>
           ))}
         </div>
@@ -282,9 +352,10 @@ export default function ServicingPage() {
       </div>
 
       {/* Request form */}
-      <div id="request-form" className="bg-white rounded-2xl p-5 sm:p-8 shadow-md border border-gray-100 max-w-2xl mx-auto">
+      <div id="request-form" className="relative overflow-hidden bg-white rounded-2xl p-5 sm:p-8 shadow-md border border-gray-100 max-w-2xl mx-auto">
+        <div className="absolute -top-10 -right-10 w-40 h-40 bg-primary/5 rounded-full blur-2xl -z-0" />
         {submitted ? (
-          <div className="text-center py-4">
+          <div className="relative text-center py-4">
             <div className="w-14 h-14 mx-auto rounded-full bg-primary/10 flex items-center justify-center mb-4">
               <CheckCircle2 className="text-primary" size={28} />
             </div>
@@ -294,7 +365,7 @@ export default function ServicingPage() {
             </p>
           </div>
         ) : (
-          <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4">
+          <form onSubmit={handleSubmit} className="relative space-y-3 sm:space-y-4">
             <h3 className="font-semibold text-base sm:text-lg mb-1 sm:mb-2 text-gray-900">
               Request Servicing
             </h3>
