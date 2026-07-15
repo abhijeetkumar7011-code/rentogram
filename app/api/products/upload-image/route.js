@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { supabaseAdmin } from "../../../../lib/supabaseAdmin";
+import { getSupabaseAdmin } from "../../../../lib/supabaseAdmin";
 
 // POST /api/products/upload-image
 // FormData fields:
@@ -14,6 +14,8 @@ import { supabaseAdmin } from "../../../../lib/supabaseAdmin";
 // exists, add a session check here before allowing the upload.
 export async function POST(request) {
   try {
+    const supabaseAdmin = getSupabaseAdmin();
+
     const formData = await request.formData();
     const file = formData.get("file");
     const productId = formData.get("productId");
@@ -67,13 +69,15 @@ export async function POST(request) {
     return NextResponse.json({ image: row }, { status: 201 });
   } catch (err) {
     console.error("upload-image route error:", err);
-    return NextResponse.json({ error: "Unexpected server error" }, { status: 500 });
+    return NextResponse.json({ error: err.message || "Unexpected server error" }, { status: 500 });
   }
 }
 
 // DELETE /api/products/upload-image?id=<product_images.id>&path=<storage-path>
 export async function DELETE(request) {
   try {
+    const supabaseAdmin = getSupabaseAdmin();
+
     const { searchParams } = new URL(request.url);
     const id = searchParams.get("id");
     const path = searchParams.get("path");
@@ -94,6 +98,6 @@ export async function DELETE(request) {
     return NextResponse.json({ success: true });
   } catch (err) {
     console.error("upload-image DELETE error:", err);
-    return NextResponse.json({ error: "Unexpected server error" }, { status: 500 });
+    return NextResponse.json({ error: err.message || "Unexpected server error" }, { status: 500 });
   }
 }
