@@ -75,7 +75,7 @@ export default function ProductsPage() {
   const [selectedCategories, setSelectedCategories]   = useState([]);
   const [selectedBrands, setSelectedBrands]           = useState([]);
   const [selectedRAM, setSelectedRAM]                 = useState([]);
-  const [maxPrice, setMaxPrice]                       = useState(2000);
+  const [maxPrice, setMaxPrice]                       = useState(null); // null = no cap yet (synced once products load)
   const [sortOpen, setSortOpen]                       = useState(false);
 
   useEffect(() => {
@@ -88,6 +88,7 @@ export default function ProductsPage() {
       if (!error && data) {
         setDbProducts(data.map((p) => ({
           id:          p.id,
+          slug:        p.slug,
           category:    p.category,
           name:        p.name,
           specs:       p.specs,
@@ -107,12 +108,25 @@ export default function ProductsPage() {
     fetchProducts();
   }, []);
 
-  const allProducts = [...dbProducts, ...sampleProducts];
+  // Show only what's actually in Supabase. The static sample catalog is
+  // purely a fallback for when the DB is empty (e.g. brand-new setup) —
+  // once you have real products, they take over completely.
+  const allProducts = dbProducts.length > 0 ? dbProducts : sampleProducts;
 
   const categories = [...new Set(allProducts.map((p) => p.category).filter(Boolean))];
   const brands     = [...new Set(allProducts.map((p) => p.brand).filter(Boolean))];
   const ramOptions = [...new Set(allProducts.map((p) => p.ram).filter(Boolean))];
   const priceMax   = Math.max(...allProducts.map((p) => p.pricePerDay), 2000);
+
+  // Sync the price cap to the real computed max once (products load async from
+  // Supabase, so priceMax isn't known on first render). Without this, the cap
+  // stayed hard-coded at ₹2000 and silently hid any pricier product from the
+  // listing by default.
+  useEffect(() => {
+    if (maxPrice === null && !loading) setMaxPrice(priceMax);
+  }, [maxPrice, loading, priceMax]);
+
+  const effectiveMaxPrice = maxPrice ?? priceMax;
 
   const filtered = useMemo(() => {
     let list = allProducts.filter((p) => {
@@ -128,20 +142,20 @@ export default function ProductsPage() {
       if (selectedCategories.length && !selectedCategories.includes(p.category)) return false;
       if (selectedBrands.length     && !selectedBrands.includes(p.brand))        return false;
       if (selectedRAM.length        && !selectedRAM.includes(p.ram))             return false;
-      if (p.pricePerDay > maxPrice)                                               return false;
+      if (p.pricePerDay > effectiveMaxPrice)                                      return false;
       return true;
     });
     if      (sort === "price_asc")  list.sort((a, b) => a.pricePerDay - b.pricePerDay);
     else if (sort === "price_desc") list.sort((a, b) => b.pricePerDay - a.pricePerDay);
     else if (sort === "name_asc")   list.sort((a, b) => a.name.localeCompare(b.name));
     return list;
-  }, [allProducts, search, selectedCategories, selectedBrands, selectedRAM, maxPrice, sort]);
+  }, [allProducts, search, selectedCategories, selectedBrands, selectedRAM, effectiveMaxPrice, sort]);
 
   const activeChips = [
     ...selectedCategories.map((v) => ({ label: v,           remove: () => setSelectedCategories((p) => p.filter((x) => x !== v)) })),
     ...selectedBrands.map((v)     => ({ label: v,           remove: () => setSelectedBrands((p)     => p.filter((x) => x !== v)) })),
     ...selectedRAM.map((v)        => ({ label: `${v} RAM`,  remove: () => setSelectedRAM((p)        => p.filter((x) => x !== v)) })),
-    ...(maxPrice < priceMax       ? [{ label: `Under ₹${maxPrice}/day`, remove: () => setMaxPrice(priceMax) }] : []),
+    ...(effectiveMaxPrice < priceMax ? [{ label: `Under ₹${effectiveMaxPrice}/day`, remove: () => setMaxPrice(priceMax) }] : []),
   ];
 
   function clearAll() {
@@ -154,7 +168,7 @@ export default function ProductsPage() {
 
   const sidebarProps = {
     categories, brands, ramOptions, priceMax,
-    selectedCategories, selectedBrands, selectedRAM, maxPrice,
+    selectedCategories, selectedBrands, selectedRAM, maxPrice: effectiveMaxPrice,
     onCategoryChange: setSelectedCategories,
     onBrandChange:    setSelectedBrands,
     onRAMChange:      setSelectedRAM,

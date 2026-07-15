@@ -54,15 +54,17 @@ function GridCard({ product }) {
     <div className="group flex flex-col rounded-2xl overflow-hidden border border-white/60 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-200 bg-white/40">
       {/* Image */}
       <div className="relative h-36 sm:h-44 overflow-hidden bg-gradient-to-br from-indigo-50 via-sky-50 to-purple-50 shrink-0">
-        <Image
-          src={product.image}
-          alt={product.name}
-          fill
-          sizes="(max-width: 640px) 50vw, 33vw"
-          className="object-cover object-center group-hover:scale-105 transition-transform duration-300"
-        />
+        <Link href={product.slug ? `/products/${product.slug}` : `/booking?product=${product.id}`} className="absolute inset-0 block">
+          <Image
+            src={product.image}
+            alt={product.name}
+            fill
+            sizes="(max-width: 640px) 50vw, 33vw"
+            className="object-cover object-center group-hover:scale-105 transition-transform duration-300"
+          />
+        </Link>
         {product.tag && (
-          <span className={`absolute top-2.5 right-2.5 text-[10px] font-semibold px-2 py-0.5 rounded-full border ${tagClass}`}>
+          <span className={`absolute top-2.5 right-2.5 pointer-events-none text-[10px] font-semibold px-2 py-0.5 rounded-full border ${tagClass}`}>
             {product.tag}
           </span>
         )}
@@ -76,9 +78,11 @@ function GridCard({ product }) {
         {product.brand && (
           <p className="text-[10px] uppercase tracking-widest text-gray-400 mb-0.5">{product.brand}</p>
         )}
-        <h3 className="font-semibold text-sm sm:text-[15px] text-gray-900 leading-snug line-clamp-1 mb-1">
-          {product.name}
-        </h3>
+        <Link href={product.slug ? `/products/${product.slug}` : `/booking?product=${product.id}`}>
+          <h3 className="font-semibold text-sm sm:text-[15px] text-gray-900 leading-snug line-clamp-1 mb-1 hover:text-primary transition-soft">
+            {product.name}
+          </h3>
+        </Link>
         <p className="text-[11px] text-gray-500 leading-relaxed line-clamp-2 mb-2">
           {product.specs}
         </p>
@@ -111,15 +115,17 @@ function ListCard({ product }) {
     <div className="group flex flex-row rounded-2xl overflow-hidden border border-white/60 shadow-sm hover:shadow-lg hover:border-primary/20 transition-all duration-200 bg-white/40">
       {/* Image — fixed width on all screens */}
       <div className="relative w-28 sm:w-44 shrink-0 bg-gradient-to-br from-indigo-50 via-sky-50 to-purple-50 overflow-hidden">
-        <Image
-          src={product.image}
-          alt={product.name}
-          fill
-          sizes="(max-width: 640px) 112px, 176px"
-          className="object-cover object-center group-hover:scale-105 transition-transform duration-300"
-        />
+        <Link href={product.slug ? `/products/${product.slug}` : `/booking?product=${product.id}`} className="absolute inset-0 block">
+          <Image
+            src={product.image}
+            alt={product.name}
+            fill
+            sizes="(max-width: 640px) 112px, 176px"
+            className="object-cover object-center group-hover:scale-105 transition-transform duration-300"
+          />
+        </Link>
         {product.tag && (
-          <span className={`absolute top-2 left-2 text-[9px] sm:text-[10px] font-semibold px-1.5 py-0.5 rounded-full border ${tagClass}`}>
+          <span className={`absolute top-2 left-2 pointer-events-none text-[9px] sm:text-[10px] font-semibold px-1.5 py-0.5 rounded-full border ${tagClass}`}>
             {product.tag}
           </span>
         )}
@@ -130,9 +136,11 @@ function ListCard({ product }) {
         {product.brand && (
           <p className="text-[9px] sm:text-[10px] uppercase tracking-widest text-gray-400 mb-0.5">{product.brand}</p>
         )}
-        <h3 className="font-semibold text-sm sm:text-base text-gray-900 leading-snug mb-1 line-clamp-1">
-          {product.name}
-        </h3>
+        <Link href={product.slug ? `/products/${product.slug}` : `/booking?product=${product.id}`}>
+          <h3 className="font-semibold text-sm sm:text-base text-gray-900 leading-snug mb-1 line-clamp-1 hover:text-primary transition-soft">
+            {product.name}
+          </h3>
+        </Link>
         <p className="text-[11px] sm:text-xs text-gray-500 mb-1.5 line-clamp-2 leading-relaxed">
           {product.specs}
         </p>
